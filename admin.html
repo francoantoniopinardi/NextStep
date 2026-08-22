@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextStep Admin - San Jose Community High School</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            color: #0f172a;
+        }
+
+        /* ===== TOPBAR ===== */
+        .topbar {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 10px 32px;
+            display: flex;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        .topbar-logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #4f46e5;
+            letter-spacing: -0.5px;
+        }
+        .topbar-logo span {
+            color: #94a3b8;
+            font-weight: 400;
+            font-size: 0.75rem;
+            margin-left: 6px;
+        }
+        .topbar-nav {
+            display: flex;
+            gap: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #64748b;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        .topbar-nav li {
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 6px 16px;
+            border-radius: 8px;
+        }
+        .topbar-nav li:hover {
+            color: #0f172a;
+            background: #f1f5f9;
+        }
+        .topbar-nav li.active {
+            color: #4f46e5;
+            background: #eef2ff;
+        }
+        .topbar-nav li.assessment-btn {
+            background: #4f46e5;
+            color: white;
+            font-weight: 600;
+            padding: 8px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+        .topbar-nav li.assessment-btn:hover {
+            background: #4338ca;
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+            transform: translateY(-1px);
+            color: white;
+        }
+        .topbar-nav li.assessment-btn.active {
+            background: #4338ca;
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .topbar-nav li.review-btn {
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+        .topbar-nav li.review-btn:hover {
+            background: rgba(16, 185, 129, 0.2);
+            color: #059669;
+        }
+
+        /* ===== PAGES ===== */
+        .page {
+            display: none;
+            padding-top: 72px;
+            min-height: 100vh;
+            background: #f8fafc;
+        }
+        .page.active {
+            display: block;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            text-align: center;
+            padding: 32px 20px 24px;
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+        .hero .subtitle {
+            color: #64748b;
+            margin-top: 4px;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        /* ===== ADMIN TABS ===== */
+        .admin-tabs {
+            display: flex;
+            gap: 4px;
+            background: white;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+        .admin-tab {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #64748b;
+            background: transparent;
+            border: none;
+            font-family: inherit;
+        }
+        .admin-tab:hover {
+            color: #0f172a;
+            background: #f1f5f9;
+        }
+        .admin-tab.active {
+            background: #4f46e5;
+            color: white;
+        }
+
+        /* ===== TAB CONTENT ===== */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        .card-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #4f46e5;
+            margin-bottom: 16px;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        @media(max-width:600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 4px;
+        }
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            color: #0f172a;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            background: white;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        /* ===== TABLE ===== */
+        .table-wrap {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        th {
+            text-align: left;
+            padding: 10px 12px;
+            color: #64748b;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #0f172a;
+        }
+        tr:hover td {
+            background: #f8fafc;
+        }
+        .empty-msg {
+            color: #94a3b8;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        /* ===== STATS ===== */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .stat-card .num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #4f46e5;
+        }
+        .stat-card .label {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 7px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #4338ca;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #334155;
+        }
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #059669;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #e2e8f0;
+            color: #64748b;
+        }
+        .btn-outline:hover {
+            border-color: #4f46e5;
+            color: #4f46e5;
+            background: #f8fafc;
+        }
+        .btn-outline.selected {
+            border-color: #4f46e5;
+            color: #4f46e5;
+            background: #eef2ff;
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 0.7rem;
+        }
+
+        /* ===== ADMIN ITEMS ===== */
+        .admin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .admin-item:last-child {
+            border-bottom: none;
+        }
+        .admin-item .item-info {
+            flex: 1;
+        }
+        .admin-item .item-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+
+        /* ===== PROFILE / ASSESSMENT ===== */
+        .profile-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .tag {
+            padding: 4px 14px;
+            border-radius: 16px;
+            border: 1.5px solid #e2e8f0;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            display: inline-block;
+        }
+        .tag:hover {
+            border-color: #4f46e5;
+            color: #4f46e5;
+        }
+        .tag.selected {
+            border-color: #4f46e5;
+            color: #4f46e5;
+            background: #eef2ff;
+        }
+
+        .result-section {
+            margin-bottom: 16px;
+        }
+        .result-section h4 {
+            color: #4f46e5;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .result-item {
+            padding: 6px 0;
+            color: #475569;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .result-item strong {
+            color: #0f172a;
+        }
+        .result-item .salary {
+            color: #10b981;
+            font-weight: 600;
+        }
+        .result-item .badge-sm {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 1px 8px;
+            border-radius: 8px;
+            background: #eef2ff;
+            color: #4f46e5;
+            margin: 2px 2px 0 0;
+            font-weight: 600;
+        }
+
+        .feedback-box {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            margin-top: 12px;
+        }
+        .feedback-box textarea {
+            min-height: 80px;
+        }
+        .star-rating {
+            display: flex;
+            gap: 4px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .star-rating .star {
+            color: #d1d5db;
+            transition: color 0.2s;
+        }
+        .star-rating .star.active {
+            color: #f59e0b;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0f172a;
+            padding: 14px 24px;
+            border-radius: 12px;
+            color: white;
+            font-size: 0.9rem;
+            z-index: 3000;
+            display: none;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+        }
+        .toast.show {
+            display: block;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .queue-status {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            z-index: 999;
+            font-size: 0.8rem;
+            color: #475569;
+            display: none;
+            max-width: 250px;
+        }
+        .queue-status .count {
+            font-weight: 700;
+            color: #4f46e5;
+        }
+        .queue-status .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .queue-status .dot.green {
+            background: #10b981;
+        }
+        .queue-status .dot.yellow {
+            background: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+        .queue-status .dot.red {
+            background: #ef4444;
+            animation: pulse 0.5s infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal h3 {
+            color: #0f172a;
+            margin-bottom: 16px;
+            font-size: 1.2rem;
+        }
+        .modal .close {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        .submission-detail {
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .submission-detail strong {
+            color: #0f172a;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .review-modal,
+        .result-select-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+        .review-modal.active,
+        .result-select-modal.active {
+            display: flex;
+        }
+        .review-box,
+        .result-select-box {
+            background: white;
+            border-radius: 16px;
+            padding: 36px;
+            max-width: 460px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .review-box h2,
+        .result-select-box h2 {
+            color: #0f172a;
+            margin-bottom: 8px;
+            font-size: 1.3rem;
+        }
+        .review-box .subtitle,
+        .result-select-box .subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .review-box .close,
+        .result-select-box .close {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+        .review-box .close:hover,
+        .result-select-box .close:hover {
+            color: #0f172a;
+        }
+        .review-box .form-group input,
+        .review-box .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            width: 100%;
+        }
+        .review-box .btn {
+            width: 100%;
+            padding: 12px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .review-box .btn:hover {
+            background: #4338ca;
+        }
+        .recent-list {
+            margin-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 12px;
+        }
+        .recent-list .label {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+        .recent-item {
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #475569;
+            transition: all 0.2s;
+        }
+        .recent-item:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        .recent-item .badge {
+            font-size: 0.6rem;
+            background: #eef2ff;
+            color: #4f46e5;
+            padding: 1px 8px;
+            border-radius: 8px;
+            margin-left: 6px;
+        }
+        .result-option {
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .result-option:hover {
+            border-color: #4f46e5;
+            background: #f8fafc;
+        }
+        .result-option .name {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .result-option .meta {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TOPBAR ===== -->
+    <div class="topbar">
+        <div class="topbar-logo">🚀 NEXTSTEP <span>Admin</span></div>
+        <ul class="topbar-nav">
+            <li class="active" onclick="switchPage('home')">Home</li>
+            <li onclick="switchPage('admin')">Admin</li>
+            <li class="assessment-btn" onclick="switchPage('profile')">📝 Take Assessment</li>
+            <li class="review-btn" onclick="openReviewModal()">📋 Review Results</li>
+        </ul>
+    </div>
+
+    <!-- ===== QUEUE STATUS ===== -->
+    <div class="queue-status" id="queueStatus">
+        <span class="dot green" id="queueDot"></span>
+        <span id="queueText">Queue: <span class="count" id="queueCount">0</span> pending</span>
+    </div>
+
+    <!-- ===== HOME ===== -->
+    <div class="page active" id="page-home">
+        <div class="container">
+            <div class="hero">
+                <h1>⚙️ Admin Dashboard</h1>
+                <p class="subtitle">Development and Acceptability of NextStep: A Web-Based Track Selection and Career Mapping Platform</p>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card"><div class="num" id="statItems">0</div><div class="label">View Items</div></div>
+                <div class="stat-card"><div class="num" id="statProfiles">0</div><div class="label">Profiles</div></div>
+                <div class="stat-card"><div class="num" id="statFeedback">0</div><div class="label">Feedback</div></div>
+            </div>
+
+            <div class="card" style="background:#f0fdf4;border-color:#86efac;">
+                <div class="card-title" style="color:#16a34a;">✅ System Status</div>
+                <p><strong>Database:</strong> <span id="dbStatus">Nhost (GraphQL)</span></p>
+                <p><strong>API Key:</strong> <span id="apiStatus">Checking...</span></p>
+                <p><strong>Submissions:</strong> <span id="submissionCount">0</span></p>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="card" style="cursor:pointer;" onclick="switchPage('admin');adminTab('content')">
+                    <div style="font-size:2rem;">📝</div>
+                    <h3>Manage Content</h3>
+                    <p style="color:#64748b;font-size:0.85rem;">Add, edit, or delete view items</p>
+                </div>
+                <div class="card" style="cursor:pointer;" onclick="switchPage('admin');adminTab('submissions')">
+                    <div style="font-size:2rem;">📋</div>
+                    <h3>View Submissions</h3>
+                    <p style="color:#64748b;font-size:0.85rem;">See all student assessment results</p>
+                </div>
+                <div class="card" style="cursor:pointer;" onclick="switchPage('admin');adminTab('feedback')">
+                    <div style="font-size:2rem;">💬</div>
+                    <h3>View Feedback</h3>
+                    <p style="color:#64748b;font-size:0.85rem;">Read student feedback and ratings</p>
+                </div>
+                <div class="card" style="cursor:pointer;" onclick="switchPage('admin');adminTab('settings')">
+                    <div style="font-size:2rem;">🔑</div>
+                    <h3>Settings</h3>
+                    <p style="color:#64748b;font-size:0.85rem;">Configure API keys and data</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ADMIN ===== -->
+    <div class="page" id="page-admin">
+        <div class="container">
+            <div class="hero" style="padding-bottom:12px;">
+                <h1 style="font-size:1.6rem;">⚙️ Admin Panel</h1>
+                <p style="font-size:0.9rem;">Manage content, view submissions, and configure the platform.</p>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="adminTab('content')">📝 Content</button>
+                <button class="admin-tab" onclick="adminTab('submissions')">📋 Submissions</button>
+                <button class="admin-tab" onclick="adminTab('feedback')">💬 Feedback</button>
+                <button class="admin-tab" onclick="adminTab('settings')">🔑 Settings</button>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="tab-content active" id="tab-content">
+                <div class="card">
+                    <div class="card-title">➕ Add View Item</div>
+                    <form id="addItemForm" onsubmit="addViewItem(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Track</label>
+                                <select id="itemTrack" required>
+                                    <option value="STEM">STEM</option>
+                                    <option value="ABM">ABM</option>
+                                    <option value="HUMSS">HUMSS</option>
+                                    <option value="TechPro_CSS">Tech Pro - CSS (ICT)</option>
+                                    <option value="TechPro_HD">Tech Pro - Hairdressing & Tailoring</option>
+                                    <option value="TechPro_FBS">Tech Pro - Food & Beverage / Bread & Pastry</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Icon (emoji)</label>
+                                <input type="text" id="itemIcon" placeholder="🔬" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" id="itemTitle" placeholder="e.g. Science Laboratory" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description (optional)</label>
+                            <textarea id="itemDesc" placeholder="Describe what students do here..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Image URL</label>
+                                <input type="url" id="itemImage" placeholder="https://example.com/image.jpg">
+                            </div>
+                            <div class="form-group">
+                                <label>Video URL</label>
+                                <input type="url" id="itemVideo" placeholder="https://www.youtube.com/embed/...">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">➕ Add Item</button>
+                    </form>
+                    <p style="color:#94a3b8;font-size:0.75rem;margin-top:8px;">✅ Added items will instantly appear on the public site.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">📂 Current View Items</div>
+                    <div id="itemsList"><p class="empty-msg">No items yet. Add one above!</p></div>
+                </div>
+            </div>
+
+            <!-- SUBMISSIONS -->
+            <div class="tab-content" id="tab-submissions">
+                <div class="card">
+                    <div class="card-title">📋 Student Profile Submissions</div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Name</th><th>Track</th><th>Grade</th><th>Personality</th><th>Date</th><th>Action</th></tr></thead>
+                            <tbody id="submissionsTable"><tr><td colspan="6" class="empty-msg">No submissions yet.</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FEEDBACK -->
+            <div class="tab-content" id="tab-feedback">
+                <div class="card">
+                    <div class="card-title">💬 Student Feedback</div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Student</th><th>Rating</th><th>Comment</th><th>Date</th></tr></thead>
+                            <tbody id="feedbackTable"><tr><td colspan="4" class="empty-msg">No feedback yet.</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS -->
+            <div class="tab-content" id="tab-settings">
+                <div class="card">
+                    <div class="card-title">🔑 API Configuration</div>
+                    <div class="form-group">
+                        <label>Groq API Key</label>
+                        <input type="password" id="apiKeyInput" placeholder="gsk_..." value="">
+                        <p style="color:#94a3b8;font-size:0.75rem;margin-top:4px;">This key is used to generate AI recommendations.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="saveApiKey()">💾 Save API Key</button>
+                    <div id="apiStatusMsg" style="margin-top:10px;font-size:0.85rem;color:#10b981;display:none;">✓ API key saved!</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">🗑️ Data Management</div>
+                    <button class="btn btn-danger" onclick="clearAllData()">⚠️ Clear All Data</button>
+                    <button class="btn btn-secondary" onclick="exportData()" style="margin-left:8px;">📤 Export Data</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" style="margin-left:8px;">📥 Import Data</button>
+                    <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
+                    <p style="color:#94a3b8;font-size:0.75rem;margin-top:8px;">Export/Import for backup and migration.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PROFILE / ASSESSMENT ===== -->
+    <div class="page" id="page-profile">
+        <div class="container profile-container">
+            <button class="btn btn-secondary" onclick="switchPage('home')" style="margin-bottom:16px;">← Back to Dashboard</button>
+
+            <div class="card">
+                <div class="card-title">👤 Student Profile</div>
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="profName" placeholder="e.g. Juan dela Cruz">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" id="profAge" placeholder="17" min="10" max="25">
+                    </div>
+                    <div class="form-group">
+                        <label>Grade Level</label>
+                        <select id="profGrade">
+                            <option value="">Select Grade</option>
+                            <option value="Grade 7">Grade 7</option>
+                            <option value="Grade 8">Grade 8</option>
+                            <option value="Grade 9">Grade 9</option>
+                            <option value="Grade 10">Grade 10</option>
+                            <option value="Grade 11">Grade 11</option>
+                            <option value="Grade 12">Grade 12</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Strand</label>
+                    <select id="profStrand">
+                        <option value="">Select Strand</option>
+                        <option value="STEM">STEM</option>
+                        <option value="ABM">ABM</option>
+                        <option value="HUMSS">HUMSS</option>
+                        <option value="TechPro_CSS">Tech Pro - Computer Systems Servicing (CSS)</option>
+                        <option value="TechPro_HD">Tech Pro - Hairdressing & Tailoring</option>
+                        <option value="TechPro_FBS">Tech Pro - Food & Beverage / Bread & Pastry</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Dream Job</label>
+                    <input type="text" id="profDream" placeholder="e.g. Software Engineer, Chef, Hairdresser">
+                </div>
+                <div class="form-group">
+                    <label>Personality Type</label>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;" id="personalityButtons">
+                        <button class="btn btn-outline" data-value="Introvert" onclick="selectPersonality(this)">🤫 Introvert</button>
+                        <button class="btn btn-outline" data-value="Extrovert" onclick="selectPersonality(this)">🗣️ Extrovert</button>
+                        <button class="btn btn-outline" data-value="Ambivert" onclick="selectPersonality(this)">⚖️ Ambivert</button>
+                    </div>
+                    <input type="hidden" id="profPersonality" value="">
+                </div>
+                <div class="form-group">
+                    <label>Interests (click to select)</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;" id="interestsContainer">
+                        <span class="tag" onclick="toggleTag(this)">💻 Technology</span>
+                        <span class="tag" onclick="toggleTag(this)">🤖 Robotics</span>
+                        <span class="tag" onclick="toggleTag(this)">🔬 Science</span>
+                        <span class="tag" onclick="toggleTag(this)">🧮 Mathematics</span>
+                        <span class="tag" onclick="toggleTag(this)">⚙️ Engineering</span>
+                        <span class="tag" onclick="toggleTag(this)">🚀 Space & Astronomy</span>
+                        <span class="tag" onclick="toggleTag(this)">📊 Business</span>
+                        <span class="tag" onclick="toggleTag(this)">💡 Entrepreneurship</span>
+                        <span class="tag" onclick="toggleTag(this)">💰 Finance</span>
+                        <span class="tag" onclick="toggleTag(this)">🎨 Arts & Design</span>
+                        <span class="tag" onclick="toggleTag(this)">📖 Writing</span>
+                        <span class="tag" onclick="toggleTag(this)">🎭 Performing Arts</span>
+                        <span class="tag" onclick="toggleTag(this)">🏛️ History</span>
+                        <span class="tag" onclick="toggleTag(this)">🌐 Languages</span>
+                        <span class="tag" onclick="toggleTag(this)">📚 Education</span>
+                        <span class="tag" onclick="toggleTag(this)">🎙️ Communication</span>
+                        <span class="tag" onclick="toggleTag(this)">🗣️ Public Speaking</span>
+                        <span class="tag" onclick="toggleTag(this)">⚖️ Law & Justice</span>
+                        <span class="tag" onclick="toggleTag(this)">🌍 Environment</span>
+                        <span class="tag" onclick="toggleTag(this)">💪 Sports</span>
+                        <span class="tag" onclick="toggleTag(this)">🎵 Music</span>
+                        <span class="tag" onclick="toggleTag(this)">🍳 Cooking</span>
+                        <span class="tag" onclick="toggleTag(this)">🧁 Baking</span>
+                        <span class="tag" onclick="toggleTag(this)">🍰 Pastry Arts</span>
+                        <span class="tag" onclick="toggleTag(this)">🍽️ Culinary Arts</span>
+                        <span class="tag" onclick="toggleTag(this)">☕ Barista & Beverage</span>
+                        <span class="tag" onclick="toggleTag(this)">✂️ Hairdressing</span>
+                        <span class="tag" onclick="toggleTag(this)">💈 Barbering</span>
+                        <span class="tag" onclick="toggleTag(this)">💄 Makeup & Beauty</span>
+                        <span class="tag" onclick="toggleTag(this)">🧵 Tailoring & Sewing</span>
+                        <span class="tag" onclick="toggleTag(this)">👗 Fashion Design</span>
+                        <span class="tag" onclick="toggleTag(this)">💻 Computer Hardware</span>
+                        <span class="tag" onclick="toggleTag(this)">📡 Networking</span>
+                        <span class="tag" onclick="toggleTag(this)">🔧 Computer Repair</span>
+                        <span class="tag" onclick="toggleTag(this)">📱 Mobile Device Repair</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Skills (click to select)</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;" id="skillsContainer">
+                        <span class="tag" onclick="toggleTag(this)">🧩 Problem Solving</span>
+                        <span class="tag" onclick="toggleTag(this)">💬 Communication</span>
+                        <span class="tag" onclick="toggleTag(this)">👑 Leadership</span>
+                        <span class="tag" onclick="toggleTag(this)">🎨 Creativity</span>
+                        <span class="tag" onclick="toggleTag(this)">🤝 Teamwork</span>
+                        <span class="tag" onclick="toggleTag(this)">⏰ Time Management</span>
+                        <span class="tag" onclick="toggleTag(this)">💪 Adaptability</span>
+                        <span class="tag" onclick="toggleTag(this)">🎯 Critical Thinking</span>
+                        <span class="tag" onclick="toggleTag(this)">🧠 Emotional Intelligence</span>
+                        <span class="tag" onclick="toggleTag(this)">🔢 Mathematics</span>
+                        <span class="tag" onclick="toggleTag(this)">💻 Programming</span>
+                        <span class="tag" onclick="toggleTag(this)">✍️ Writing</span>
+                        <span class="tag" onclick="toggleTag(this)">🔍 Research</span>
+                        <span class="tag" onclick="toggleTag(this)">📊 Data Analysis</span>
+                        <span class="tag" onclick="toggleTag(this)">🤖 Technical Skills</span>
+                        <span class="tag" onclick="toggleTag(this)">💼 Project Management</span>
+                        <span class="tag" onclick="toggleTag(this)">📈 Financial Literacy</span>
+                        <span class="tag" onclick="toggleTag(this)">🌐 Foreign Languages</span>
+                        <span class="tag" onclick="toggleTag(this)">🍳 Cooking Skills</span>
+                        <span class="tag" onclick="toggleTag(this)">🧁 Baking Skills</span>
+                        <span class="tag" onclick="toggleTag(this)">🔪 Knife Skills</span>
+                        <span class="tag" onclick="toggleTag(this)">🍽️ Food Presentation</span>
+                        <span class="tag" onclick="toggleTag(this)">✂️ Hair Cutting</span>
+                        <span class="tag" onclick="toggleTag(this)">💇 Hair Styling</span>
+                        <span class="tag" onclick="toggleTag(this)">🧵 Sewing Skills</span>
+                        <span class="tag" onclick="toggleTag(this)">👗 Pattern Making</span>
+                        <span class="tag" onclick="toggleTag(this)">🖥️ Computer Assembly</span>
+                        <span class="tag" onclick="toggleTag(this)">🔧 Hardware Troubleshooting</span>
+                        <span class="tag" onclick="toggleTag(this)">📡 Network Configuration</span>
+                        <span class="tag" onclick="toggleTag(this)">💾 Software Installation</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="submitProfile()" style="width:100%;margin-top:8px;padding:12px;">🚀 Get Recommendations</button>
+            </div>
+
+            <!-- RESULTS -->
+            <div id="profResults" style="display:none;">
+                <div class="card">
+                    <div class="card-title">🎯 Your Results</div>
+                    <div id="resultsContent"></div>
+                    <div class="feedback-box">
+                        <div class="card-title" style="margin-bottom:8px;">💬 Rate Your Experience</div>
+                        <div class="star-rating" id="starRating">
+                            <span class="star" data-value="1" onclick="setRating(1)">★</span>
+                            <span class="star" data-value="2" onclick="setRating(2)">★</span>
+                            <span class="star" data-value="3" onclick="setRating(3)">★</span>
+                            <span class="star" data-value="4" onclick="setRating(4)">★</span>
+                            <span class="star" data-value="5" onclick="setRating(5)">★</span>
+                        </div>
+                        <input type="hidden" id="feedbackRating" value="0">
+                        <div class="form-group" style="margin-top:8px;">
+                            <label>Your Feedback</label>
+                            <textarea id="feedbackComment" placeholder="Share your thoughts..."></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="submitFeedback()">📤 Submit Feedback</button>
+                    </div>
+                    <button class="btn btn-secondary" onclick="document.getElementById('profResults').style.display='none'" style="margin-top:12px;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== REVIEW MODAL ===== -->
+    <div class="review-modal" id="reviewModal">
+        <div class="review-box">
+            <button class="close" onclick="closeReviewModal()">✕</button>
+            <h2>📋 Review Your Results</h2>
+            <p class="subtitle">Enter your name to view your saved recommendations.</p>
+            <div class="form-group">
+                <label>Your Full Name</label>
+                <input type="text" id="reviewNameInput" placeholder="e.g. Juan dela Cruz" onkeydown="if(event.key==='Enter') searchResults()">
+            </div>
+            <button class="btn" onclick="searchResults()">🔍 Find My Results</button>
+            <div class="recent-list" id="recentList" style="display:none;">
+                <div class="label">📌 Recent Students on this Device</div>
+                <div id="recentItems"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== RESULT SELECT MODAL ===== -->
+    <div class="result-select-modal" id="resultSelectModal">
+        <div class="result-select-box">
+            <button class="close" onclick="closeResultSelectModal()">✕</button>
+            <h2>📋 Multiple Results Found</h2>
+            <p class="subtitle">Select which result you want to view:</p>
+            <div id="resultSelectList"></div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="close" onclick="closeModal()">✕</button>
+            <h3 id="modalTitle">Submission Details</h3>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // // ============================================================
+// ===== NHOST CONFIG – ENVIRONMENT VARIABLES =====
+// ============================================================
+const NHOST_URL = process.env.NHOST_URL || 'https://dtstnnkmjmwpsrjcojcr.hasura.ap-southeast-1.nhost.run';
+const NHOST_KEY = process.env.NHOST_KEY || "fallback-key-for-local-testing-only";
+
+// ============================================================
+// ===== MULTIPLE API KEYS =====
+// ============================================================
+const API_KEYS = (process.env.GROQ_API_KEY || 'gsk_fallback-local-only').split(',');
+        let keyIndex = 0;
+
+        function getApiKey() {
+            const key = API_KEYS[keyIndex];
+            keyIndex = (keyIndex + 1) % API_KEYS.length;
+            return key;
+        }
+
+        // ============================================================
+        // ===== QUEUE SYSTEM =====
+        // ============================================================
+        let requestQueue = [];
+        let isProcessing = false;
+
+        function updateQueueStatus() {
+            const el = document.getElementById('queueStatus');
+            const count = document.getElementById('queueCount');
+            const dot = document.getElementById('queueDot');
+            const text = document.getElementById('queueText');
+            if (requestQueue.length > 0) {
+                el.style.display = 'block';
+                count.textContent = requestQueue.length;
+                dot.className = 'dot yellow';
+                text.innerHTML = `Queue: <span class="count">${requestQueue.length}</span> pending`;
+            } else if (isProcessing) {
+                el.style.display = 'block';
+                count.textContent = '⏳';
+                dot.className = 'dot yellow';
+                text.innerHTML = `Processing request...`;
+            } else {
+                el.style.display = 'none';
+            }
+        }
+
+        async function processQueue() {
+            if (isProcessing || requestQueue.length === 0) return;
+            isProcessing = true;
+            updateQueueStatus();
+            while (requestQueue.length > 0) {
+                const batch = requestQueue.splice(0, 3);
+                for (const item of batch) {
+                    try {
+                        await callGroqAPI(item);
+                    } catch (err) {
+                        console.error('Queue item failed:', err);
+                        if (err.message.includes('429') || err.message.includes('rate limit')) {
+                            requestQueue.push(item);
+                        }
+                    }
+                }
+                await sleep(5000);
+                updateQueueStatus();
+            }
+            isProcessing = false;
+            updateQueueStatus();
+        }
+
+        function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+        // ============================================================
+        // ===== NHOST GRAPHQL HELPERS =====
+        // ============================================================
+        async function graphqlRequest(query, variables = {}) {
+            const response = await fetch(`${NHOST_URL}/v1/graphql`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-hasura-admin-secret': NHOST_KEY
+                },
+                body: JSON.stringify({ query, variables })
+            });
+            const result = await response.json();
+            if (result.errors) {
+                console.error('GraphQL errors:', result.errors);
+                throw new Error(result.errors[0].message);
+            }
+            return result.data;
+        }
+
+        async function nhostGet(table, fields = 'id track icon title description image video created_at') {
+            const query = `query { ${table} { ${fields} } }`;
+            const data = await graphqlRequest(query);
+            return data[table] || [];
+        }
+
+        async function nhostPost(table, data) {
+            const insertMutation = `
+                mutation Insert($objects: [${table}_insert_input!]!) {
+                    insert_${table}(objects: $objects) {
+                        returning { id }
+                    }
+                }
+            `;
+            const variables = { objects: [data] };
+            const result = await graphqlRequest(insertMutation, variables);
+            return result[`insert_${table}`];
+        }
+
+        async function nhostDelete(table, id) {
+            const mutation = `
+                mutation Delete($id: uuid!) {
+                    delete_${table}(where: {id: {_eq: $id}}) {
+                        affected_rows
+                    }
+                }
+            `;
+            const variables = { id };
+            const result = await graphqlRequest(mutation, variables);
+            return result[`delete_${table}`];
+        }
+
+        async function nhostPatch(table, id, data) {
+            const mutation = `
+                mutation Update($id: uuid!, $data: ${table}_set_input!) {
+                    update_${table}(where: {id: {_eq: $id}}, _set: $data) {
+                        affected_rows
+                    }
+                }
+            `;
+            const variables = { id, data };
+            const result = await graphqlRequest(mutation, variables);
+            return result[`update_${table}`];
+        }
+
+        // ============================================================
+        // ===== CACHE CHECK =====
+        // ============================================================
+        async function checkCache(data) {
+            const fields = 'id name grade track interests skills results created_at';
+            const results = await nhostGet('ai_recommendations', fields);
+            return results.find(r =>
+                r.name === data.name &&
+                r.grade === data.grade &&
+                r.track === data.track &&
+                JSON.stringify(r.interests || []).sort() === JSON.stringify(data.interests || []).sort() &&
+                JSON.stringify(r.skills || []).sort() === JSON.stringify(data.skills || []).sort()
+            );
+        }
+
+        // ============================================================
+        // ===== FALLBACK PROVIDERS =====
+        // ============================================================
+        async function callOpenRouter(prompt) {
+            try {
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer sk-or-v1-your-openrouter-key'
+                    },
+                    body: JSON.stringify({
+                        model: 'meta-llama/llama-3.1-8b-instruct:free',
+                        messages: [{ role: 'user', content: prompt }],
+                        max_tokens: 1500,
+                        temperature: 0.7
+                    })
+                });
+                const data = await response.json();
+                return data.choices[0].message.content;
+            } catch (err) {
+                throw err;
+            }
+        }
+
+        async function callTogetherAI(prompt) {
+            try {
+                const response = await fetch('https://api.together.xyz/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer your-together-key'
+                    },
+                    body: JSON.stringify({
+                        model: 'meta-llama/Llama-3.1-8B-Instruct',
+                        messages: [{ role: 'user', content: prompt }],
+                        max_tokens: 1500,
+                        temperature: 0.7
+                    })
+                });
+                const data = await response.json();
+                return data.choices[0].message.content;
+            } catch (err) {
+                throw err;
+            }
+        }
+
+        // ============================================================
+        // ===== CALL GROQ API =====
+        // ============================================================
+        async function callGroqAPI(data) {
+            const { name, age, grade, track, dream, personality, interests, skills, prompt } = data;
+            try {
+                const key = getApiKey();
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+                    body: JSON.stringify({
+                        model: 'llama-3.1-8b-instant',
+                        messages: [{ role: 'user', content: prompt }],
+                        max_tokens: 1500,
+                        temperature: 0.7
+                    })
+                });
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error?.message || 'API error');
+                }
+                const result = await response.json();
+                let text = result.choices[0].message.content.replace(/```json|```/g, '').trim();
+                const parsed = JSON.parse(text);
+                // Save to cache
+                try {
+                    await nhostPost('ai_recommendations', {
+                        name,
+                        age: parseInt(age) || null,
+                        grade,
+                        track,
+                        personality,
+                        interests,
+                        skills,
+                        dream,
+                        results: parsed,
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    });
+                    console.log('✅ Cached in Nhost');
+                } catch (err) {
+                    console.log('Cache save error:', err);
+                }
+                return parsed;
+            } catch (err) {
+                console.log('Groq API error:', err.message);
+                try {
+                    const text = await callOpenRouter(prompt);
+                    return JSON.parse(text.replace(/```json|```/g, '').trim());
+                } catch (fallbackErr) {
+                    try {
+                        const text = await callTogetherAI(prompt);
+                        return JSON.parse(text.replace(/```json|```/g, '').trim());
+                    } catch (fallbackErr2) {
+                        throw new Error('All AI providers failed');
+                    }
+                }
+            }
+        }
+
+        // ============================================================
+        // ===== VIEW ITEMS CRUD =====
+        // ============================================================
+        let viewItems = [];
+        let submissions = [];
+        let feedbacks = [];
+        let apiKey = localStorage.getItem('nextstep_api_key') || '';
+
+        async function loadViewItems() {
+            try {
+                viewItems = await nhostGet('view_items');
+                localStorage.setItem('nextstep_items', JSON.stringify(viewItems));
+            } catch (err) {
+                console.log('Nhost get error, using local:', err);
+                viewItems = JSON.parse(localStorage.getItem('nextstep_items') || '[]');
+            }
+            renderItems();
+            updateStats();
+        }
+
+        async function addViewItem(e) {
+            e.preventDefault();
+            const item = {
+                track: document.getElementById('itemTrack').value,
+                icon: document.getElementById('itemIcon').value || '📌',
+                title: document.getElementById('itemTitle').value.trim(),
+                description: document.getElementById('itemDesc').value.trim(),
+                image: document.getElementById('itemImage').value.trim(),
+                video: document.getElementById('itemVideo').value.trim(),
+                created_at: new Date().toISOString()
+            };
+            if (!item.title) { showToast('Please enter a title'); return; }
+            try {
+                await nhostPost('view_items', item);
+                showToast('✅ Item added to Nhost!');
+                await loadViewItems();
+            } catch (err) {
+                console.log('Nhost save error, saving locally:', err);
+                item.id = Date.now();
+                viewItems.push(item);
+                localStorage.setItem('nextstep_items', JSON.stringify(viewItems));
+                renderItems();
+                updateStats();
+                showToast('⚠️ Added locally (Nhost error)');
+            }
+            document.getElementById('addItemForm').reset();
+        }
+
+        async function deleteItem(id) {
+            if (!confirm('Delete this item?')) return;
+            try {
+                await nhostDelete('view_items', id);
+                showToast('🗑️ Deleted from Nhost');
+                await loadViewItems();
+            } catch (err) {
+                console.log('Nhost delete error, deleting locally:', err);
+                viewItems = viewItems.filter(i => i.id !== id);
+                localStorage.setItem('nextstep_items', JSON.stringify(viewItems));
+                renderItems();
+                updateStats();
+                showToast('⚠️ Deleted locally (Nhost error)');
+            }
+        }
+
+        function renderItems() {
+            const container = document.getElementById('itemsList');
+            if (viewItems.length === 0) {
+                container.innerHTML = '<p class="empty-msg">No items yet. Add one above!</p>';
+                return;
+            }
+            container.innerHTML = viewItems.map(item => `
+                <div class="admin-item">
+                    <div class="item-info">
+                        <span style="font-size:1.2rem;">${item.icon}</span>
+                        <strong style="color:#0f172a;margin-left:8px;">${item.title}</strong>
+                        <span style="color:#94a3b8;font-size:0.75rem;margin-left:8px;">[${item.track}]</span>
+                        ${item.description ? `<p style="color:#64748b;font-size:0.8rem;margin-top:2px;">${item.description}</p>` : ''}
+                        ${item.image ? `<span style="color:#10b981;font-size:0.6rem;">🖼️ Image</span>` : ''}
+                        ${item.video ? `<span style="color:#10b981;font-size:0.6rem;">🎬 Video</span>` : ''}
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-danger btn-sm" onclick="deleteItem('${item.id}')">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ============================================================
+        // ===== SUBMISSIONS =====
+        // ============================================================
+        function renderSubmissions() {
+            const tbody = document.getElementById('submissionsTable');
+            const localSubmissions = JSON.parse(localStorage.getItem('nextstep_submissions') || '[]');
+            submissions = localSubmissions;
+            if (submissions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-msg">No submissions yet.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = submissions.slice().reverse().map((s, idx) => `
+                <tr>
+                    <td><strong>${s.name || 'N/A'}</strong></td>
+                    <td><span style="background:#eef2ff;color:#4f46e5;padding:1px 10px;border-radius:8px;font-size:0.7rem;font-weight:600;">${s.track || 'N/A'}</span></td>
+                    <td>${s.grade || 'N/A'}</td>
+                    <td>${s.personality || 'N/A'}</td>
+                    <td style="font-size:0.75rem;color:#94a3b8;">${new Date(s.date || s.created_at).toLocaleDateString()}</td>
+                    <td><button class="btn btn-primary btn-sm" onclick="viewSubmission(${submissions.length - 1 - idx})">👁️ View</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function viewSubmission(index) {
+            const s = submissions.slice().reverse()[index];
+            if (!s) return;
+            document.getElementById('modalTitle').textContent = `Submission - ${s.name}`;
+            document.getElementById('modalContent').innerHTML = `
+                <div class="submission-detail"><strong>Name:</strong> ${s.name || 'N/A'}</div>
+                <div class="submission-detail"><strong>Age:</strong> ${s.age || 'N/A'}</div>
+                <div class="submission-detail"><strong>Grade:</strong> ${s.grade || 'N/A'}</div>
+                <div class="submission-detail"><strong>Strand:</strong> ${s.track || 'N/A'}</div>
+                <div class="submission-detail"><strong>Personality:</strong> ${s.personality || 'N/A'}</div>
+                <div class="submission-detail"><strong>Dream Job:</strong> ${s.dream || 'N/A'}</div>
+                <div class="submission-detail"><strong>Interests:</strong> ${s.interests?.join(', ') || 'N/A'}</div>
+                <div class="submission-detail"><strong>Skills:</strong> ${s.skills?.join(', ') || 'N/A'}</div>
+                <div class="submission-detail"><strong>Date:</strong> ${new Date(s.date || s.created_at).toLocaleString()}</div>
+                ${s.results ? `<div class="submission-detail"><strong>Results:</strong> <pre style="background:#f8fafc;padding:8px;border-radius:6px;font-size:0.8rem;margin-top:4px;overflow-x:auto;">${JSON.stringify(s.results, null, 2)}</pre></div>` : ''}
+            `;
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // ============================================================
+        // ===== FEEDBACK =====
+        // ============================================================
+        function renderFeedback() {
+            const tbody = document.getElementById('feedbackTable');
+            const localFeedback = JSON.parse(localStorage.getItem('nextstep_feedback') || '[]');
+            feedbacks = localFeedback;
+            if (feedbacks.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty-msg">No feedback yet.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = feedbacks.slice().reverse().map(f => `
+                <tr>
+                    <td><strong>${f.name || 'Anonymous'}</strong></td>
+                    <td>${'⭐'.repeat(Math.min(f.rating, 5))}</td>
+                    <td>${f.comment || ''}</td>
+                    <td style="font-size:0.75rem;color:#94a3b8;">${new Date(f.date || f.created_at).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ============================================================
+        // ===== SUBMIT PROFILE (Admin Assessment) =====
+        // ============================================================
+        async function submitProfile() {
+            const name = document.getElementById('profName').value.trim();
+            const age = document.getElementById('profAge').value;
+            const grade = document.getElementById('profGrade').value;
+            const track = document.getElementById('profStrand').value;
+            const dream = document.getElementById('profDream').value.trim();
+            const personality = document.getElementById('profPersonality').value;
+            const interests = getSelectedTags('interestsContainer');
+            const skills = getSelectedTags('skillsContainer');
+
+            if (!name) { showToast('Please enter your name'); return; }
+            if (!grade) { showToast('Please select your grade level'); return; }
+            if (!track) { showToast('Please select a strand'); return; }
+            if (!personality) { showToast('Please select a personality type'); return; }
+            if (interests.length === 0) { showToast('Please select at least one interest'); return; }
+            if (skills.length === 0) { showToast('Please select at least one skill'); return; }
+
+            // Save recent
+            const recent = JSON.parse(localStorage.getItem('nextstep_recent_students') || '[]');
+            const existing = recent.findIndex(r => r.name === name && r.track === track);
+            if (existing !== -1) recent.splice(existing, 1);
+            recent.unshift({ name, track, grade });
+            if (recent.length > 10) recent.pop();
+            localStorage.setItem('nextstep_recent_students', JSON.stringify(recent));
+
+            // Check cache
+            showToast('🔍 Checking for existing recommendations...');
+            try {
+                const cached = await checkCache({ name, grade, track, interests, skills });
+                if (cached) {
+                    showToast('✅ Found your previous results! Loading instantly...');
+                    let results = cached.results;
+                    if (typeof results === 'string') { try { results = JSON.parse(results); } catch (e) {} }
+                    const gradeNum = parseInt(grade.match(/\d+/)?.[0] || 0);
+                    const isJuniorHigh = gradeNum >= 7 && gradeNum <= 10;
+                    displayResults(results, name, track, grade, isJuniorHigh);
+                    return;
+                }
+            } catch (err) { console.log('Cache check failed:', err); }
+
+            // Build prompt
+            const gradeNum = parseInt(grade.match(/\d+/)?.[0] || 0);
+            const isSeniorHigh = gradeNum >= 11;
+            const isJuniorHigh = gradeNum >= 7 && gradeNum <= 10;
+
+            const trackDisplayMap = {
+                'STEM': 'STEM',
+                'ABM': 'ABM',
+                'HUMSS': 'HUMSS',
+                'TechPro_CSS': 'Tech Pro - Computer Systems Servicing (CSS/ICT)',
+                'TechPro_HD': 'Tech Pro - Hairdressing & Tailoring',
+                'TechPro_FBS': 'Tech Pro - Food & Beverage / Bread & Pastry'
+            };
+            const trackDisplay = trackDisplayMap[track] || track;
+
+            const prompt = `You are a career counselor. Provide comprehensive recommendations for a student.
+Student: ${name}, Age: ${age || 'N/A'}, Grade: ${grade}, Track/Strand interested in: ${trackDisplay}
+Interests: ${interests.join(', ')}
+Skills: ${skills.join(', ')}
+${dream ? 'Dream Job: ' + dream : ''}
+Personality: ${personality}
+IMPORTANT CONTEXT:
+- The student is from San Jose, General Mariano Alvarez (GMA), Cavite, Philippines.
+- ${isSeniorHigh ? 'This student is in Senior High (Grades 11-12). Provide specific career and college guidance.' : ''}
+- ${isJuniorHigh ? 'This student is in Junior High (Grades 7-10). Explain why they should consider pursuing this track and what careers it leads to.' : ''}
+RECOMMENDED UNIVERSITIES NEAR GMA CAVITE:
+- Cavite State University (CvSU) - Indang, Cavite
+- De La Salle University - Dasmariñas (DLSU-D)
+- National University - Laguna (NU Laguna)
+- University of Perpetual Help System DALTA - Molino
+- Lyceum of the Philippines University - Cavite
+- St. Dominic College of Asia - Bacoor
+- Far Eastern University - Cavite (FEU Cavite)
+- Philippine Christian University - Dasmariñas
+- PATTS College of Aeronautics - Cavite
+- Also include UP Diliman, Ateneo, DLSU Manila, UST
+Use these REAL companies:
+- Tech: Google, Microsoft, Apple, Meta, Amazon, IBM, Oracle, Accenture, Concentrix, TaskUs
+- Finance: JPMorgan, Goldman Sachs, BDO, BPI, Metrobank, PwC, Deloitte
+- Healthcare: Pfizer, Johnson & Johnson, Merck, Asian Hospital, DLSU Medical Center
+- Food & Beverage: Jollibee, McDonald's, Max's Restaurant, Starbucks, Monde Nissin, San Miguel Food, Nestlé Philippines, Universal Robina
+- Beauty & Fashion: Bench, Penshoppe, Figaro, Shiseido, L'Oréal, Unilever, Colgate-Palmolive
+- Other: Procter & Gamble, Unilever, Ayala, SM Group, Globe, PLDT, San Miguel
+Respond with this JSON only:
+{
+  "careers": [{"title":"Career","desc":"Description","salary":"₱XX,000/mo","companies":["Company A","Company B"]}],
+  "courses": [{"title":"Course","desc":"Why it fits","universities":["Univ A","Univ B"]}],
+  "jobs": [{"title":"Job","desc":"Brief","salary":"₱XX,000/mo","companies":["Company X","Company Y"]}],
+  "advice": "Personalized advice paragraph."
+}`;
+
+            const data = { name, age, grade, track, dream, personality, interests, skills, prompt };
+
+            // Queue
+            if (requestQueue.length > 0 || isProcessing) {
+                showToast(`⏳ Your request is queued (${requestQueue.length + 1} pending)`);
+                requestQueue.push(data);
+                updateQueueStatus();
+                const checkInterval = setInterval(async () => {
+                    const cached = await checkCache({ name, grade, track, interests, skills });
+                    if (cached) {
+                        clearInterval(checkInterval);
+                        let results = cached.results;
+                        if (typeof results === 'string') { try { results = JSON.parse(results); } catch (e) {} }
+                        displayResults(results, name, track, grade, isJuniorHigh);
+                        showToast('✅ Results ready!');
+                    }
+                }, 3000);
+                return;
+            }
+
+            // Call API
+            showToast('🧠 Generating recommendations...');
+            try {
+                const result = await callGroqAPI(data);
+                displayResults(result, name, track, grade, isJuniorHigh);
+                showToast('✅ Results ready!');
+            } catch (err) {
+                showToast('❌ Error: ' + err.message);
+                console.error(err);
+            }
+        }
+
+        // ============================================================
+        // ===== DISPLAY RESULTS =====
+        // ============================================================
+        function displayResults(result, name, track, grade, isJuniorHigh) {
+            document.getElementById('resultsContent').innerHTML = `
+                <div style="color:#4f46e5;font-size:1.2rem;font-weight:700;margin-bottom:16px;">🎯 Results for ${name}</div>
+                ${isJuniorHigh ? `
+                    <div style="background:#eef2ff;padding:12px 16px;border-radius:10px;border:1px solid #4f46e5;margin-bottom:16px;">
+                        <strong style="color:#4f46e5;">📌 Why pursue the ${track} track?</strong>
+                        <p style="color:#475569;font-size:0.9rem;margin-top:4px;">${result.why_track || 'This track prepares you for exciting careers in ' + track + ' fields.'}</p>
+                    </div>
+                ` : ''}
+                <div class="result-section"><h4>💼 Career Paths</h4>${result.careers.map(c => `
+                    <div class="result-item">
+                        <strong>${c.title}</strong> — ${c.desc}
+                        <div style="margin-top:2px;"><span class="salary">${c.salary}</span> ${c.companies ? c.companies.map(co => `<span class="badge-sm">🏢 ${co}</span>`).join('') : ''}</div>
+                    </div>`).join('')}</div>
+                <div class="result-section"><h4>🎓 College Courses</h4>${result.courses.map(c => `
+                    <div class="result-item">
+                        <strong>${c.title}</strong> — ${c.desc}
+                        ${c.universities ? `<div style="margin-top:2px;">${c.universities.map(u => `<span class="badge-sm">🎓 ${u}</span>`).join('')}</div>` : ''}
+                    </div>`).join('')}</div>
+                <div class="result-section"><h4>💰 Job Opportunities</h4>${result.jobs.map(j => `
+                    <div class="result-item">
+                        <strong>${j.title}</strong> — ${j.desc}
+                        <div style="margin-top:2px;"><span class="salary">${j.salary}</span> ${j.companies ? j.companies.map(co => `<span class="badge-sm">🏢 ${co}</span>`).join('') : ''}</div>
+                    </div>`).join('')}</div>
+                ${result.advice ? `<div class="result-section" style="background:#f8fafc;padding:12px 16px;border-radius:10px;border:1px solid #e2e8f0;"><h4 style="color:#0f172a;">💡 Personalized Advice</h4><p style="color:#475569;font-size:0.9rem;line-height:1.6;">${result.advice}</p></div>` : ''}
+            `;
+            document.getElementById('profResults').style.display = 'block';
+            document.getElementById('profResults').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ============================================================
+        // ===== OTHER FUNCTIONS =====
+        // ============================================================
+        function selectPersonality(btn) {
+            document.querySelectorAll('#personalityButtons .btn-outline').forEach(b => {
+                b.classList.remove('selected');
+                b.style.borderColor = '#e2e8f0';
+                b.style.background = '#f1f5f9';
+            });
+            btn.classList.add('selected');
+            btn.style.borderColor = '#4f46e5';
+            btn.style.background = '#eef2ff';
+            document.getElementById('profPersonality').value = btn.dataset.value;
+        }
+
+        function toggleTag(el) {
+            el.classList.toggle('selected');
+        }
+
+        function getSelectedTags(containerId) {
+            return [...document.querySelectorAll('#' + containerId + ' .tag.selected')].map(t => t.textContent.trim());
+        }
+
+        function switchPage(page) {
+            document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+            document.querySelectorAll('.topbar-nav li').forEach(el => el.classList.remove('active'));
+            const navItems = document.querySelectorAll('.topbar-nav li');
+            const idx = ['home', 'admin', 'profile'].indexOf(page);
+            if (navItems[idx]) navItems[idx].classList.add('active');
+        }
+
+        function adminTab(tab) {
+            document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.admin-tab[onclick*="${tab}"]`).classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
+        function openReviewModal() {
+            document.getElementById('reviewModal').classList.add('active');
+            document.getElementById('reviewNameInput').value = '';
+            document.getElementById('reviewNameInput').focus();
+            loadRecentStudents();
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.remove('active');
+        }
+
+        function loadRecentStudents() {
+            const recent = JSON.parse(localStorage.getItem('nextstep_recent_students') || '[]');
+            const container = document.getElementById('recentItems');
+            const listDiv = document.getElementById('recentList');
+            if (recent.length === 0) { listDiv.style.display = 'none'; return; }
+            listDiv.style.display = 'block';
+            container.innerHTML = recent.map(item => `
+                <div class="recent-item" onclick="selectRecentStudent('${item.name}', '${item.track}')">
+                    👤 ${item.name} <span class="badge">${item.track}</span>
+                    <span style="color:#94a3b8;font-size:0.7rem;margin-left:6px;">${item.grade}</span>
+                </div>
+            `).join('');
+        }
+
+        function selectRecentStudent(name, track) {
+            document.getElementById('reviewNameInput').value = name;
+            setTimeout(searchResults, 300);
+        }
+
+        function closeResultSelectModal() {
+            document.getElementById('resultSelectModal').classList.remove('active');
+        }
+
+        function searchResults() {
+            const name = document.getElementById('reviewNameInput').value.trim();
+            if (!name) { showToast('Please enter your name'); return; }
+            closeReviewModal();
+            showToast('🔍 Searching for results...');
+            try {
+                const submissions = JSON.parse(localStorage.getItem('nextstep_submissions') || '[]');
+                const results = submissions.filter(s => s.name && s.name.toLowerCase().includes(name.toLowerCase()));
+                if (!results || results.length === 0) {
+                    showToast('❌ No results found for "' + name + '". Try taking the assessment first.');
+                    setTimeout(() => openReviewModal(), 1500);
+                    return;
+                }
+                if (results.length === 1) {
+                    displaySavedResult(results[0]);
+                } else {
+                    const modal = document.getElementById('resultSelectModal');
+                    const list = document.getElementById('resultSelectList');
+                    list.innerHTML = results.map(item => `
+                        <div class="result-option" onclick="displaySavedResult(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                            <div class="name">${item.name}</div>
+                            <div class="meta">${item.track} • ${item.grade || 'No grade'} • ${new Date(item.date || item.created_at).toLocaleDateString()}</div>
+                        </div>
+                    `).join('');
+                    modal.classList.add('active');
+                    showToast(`📋 Found ${results.length} results for "${name}"`);
+                }
+            } catch (err) {
+                showToast('❌ Error searching: ' + err.message);
+            }
+        }
+
+        function displaySavedResult(item) {
+            document.getElementById('resultSelectModal').classList.remove('active');
+            let results = item.results;
+            if (typeof results === 'string') { try { results = JSON.parse(results); } catch (e) { results = item.results; } }
+            const gradeNum = parseInt((item.grade || '').match(/\d+/)?.[0] || 0);
+            const isJuniorHigh = gradeNum >= 7 && gradeNum <= 10;
+            switchPage('profile');
+            displayResults(results, item.name, item.track, item.grade || 'Grade N/A', isJuniorHigh);
+            showToast('✅ Results loaded!');
+        }
+
+        // ============================================================
+        // ===== FEEDBACK =====
+        // ============================================================
+        let currentRating = 0;
+
+        function setRating(val) {
+            currentRating = val;
+            document.getElementById('feedbackRating').value = val;
+            document.querySelectorAll('.star').forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= val));
+        }
+
+        function submitFeedback() {
+            const name = document.getElementById('profName').value.trim() || 'Anonymous';
+            const rating = parseInt(document.getElementById('feedbackRating').value);
+            const comment = document.getElementById('feedbackComment').value.trim();
+            if (rating === 0) { showToast('Please select a rating'); return; }
+            if (!comment) { showToast('Please share your feedback'); return; }
+            const feedback = { name, rating, comment, date: Date.now(), created_at: new Date().toISOString() };
+            let feedbacks = JSON.parse(localStorage.getItem('nextstep_feedback') || '[]');
+            feedbacks.push(feedback);
+            localStorage.setItem('nextstep_feedback', JSON.stringify(feedbacks));
+            renderFeedback();
+            updateStats();
+            showToast('✅ Thank you for your feedback!');
+            document.getElementById('feedbackComment').value = '';
+            document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+            document.getElementById('feedbackRating').value = '0';
+            currentRating = 0;
+        }
+
+        // ============================================================
+        // ===== SETTINGS =====
+        // ============================================================
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (!key) { showToast('Please enter a valid API key'); return; }
+            localStorage.setItem('nextstep_api_key', key);
+            apiKey = key;
+            document.getElementById('apiStatusMsg').style.display = 'block';
+            setTimeout(() => document.getElementById('apiStatusMsg').style.display = 'none', 3000);
+            document.getElementById('apiStatus').textContent = '✅ Configured';
+            document.getElementById('apiStatus').style.color = '#16a34a';
+            showToast('✅ API key saved!');
+        }
+
+        function clearAllData() {
+            if (!confirm('⚠️ This will delete ALL data. Are you sure?')) return;
+            localStorage.removeItem('nextstep_items');
+            localStorage.removeItem('nextstep_submissions');
+            localStorage.removeItem('nextstep_feedback');
+            viewItems = [];
+            submissions = [];
+            feedbacks = [];
+            renderItems();
+            renderSubmissions();
+            renderFeedback();
+            updateStats();
+            showToast('🗑️ All data cleared');
+        }
+
+        function exportData() {
+            const data = { viewItems, submissions, feedbacks, exportedAt: new Date().toISOString() };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `nextstep_backup_${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('📤 Data exported successfully!');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.viewItems) { viewItems = data.viewItems;
+                        localStorage.setItem('nextstep_items', JSON.stringify(viewItems)); }
+                    if (data.submissions) { submissions = data.submissions;
+                        localStorage.setItem('nextstep_submissions', JSON.stringify(submissions)); }
+                    if (data.feedbacks) { feedbacks = data.feedbacks;
+                        localStorage.setItem('nextstep_feedback', JSON.stringify(feedbacks)); }
+                    renderItems();
+                    renderSubmissions();
+                    renderFeedback();
+                    updateStats();
+                    showToast('📥 Data imported successfully!');
+                } catch (err) {
+                    showToast('❌ Error importing data: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function updateStats() {
+            document.getElementById('statItems').textContent = viewItems.length;
+            document.getElementById('statProfiles').textContent = submissions.length;
+            document.getElementById('statFeedback').textContent = feedbacks.length;
+            document.getElementById('submissionCount').textContent = submissions.length;
+        }
+
+        function updateStatus() {
+            if (apiKey) {
+                document.getElementById('apiStatus').textContent = '✅ Configured';
+                document.getElementById('apiStatus').style.color = '#16a34a';
+            } else {
+                document.getElementById('apiStatus').textContent = '⚠️ Not set';
+                document.getElementById('apiStatus').style.color = '#f59e0b';
+            }
+            document.getElementById('dbStatus').textContent = '✅ Nhost (GraphQL)';
+            document.getElementById('dbStatus').style.color = '#16a34a';
+        }
+
+        // ============================================================
+        // ===== TOAST =====
+        // ============================================================
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        // ============================================================
+        // ===== INIT =====
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadViewItems();
+            renderSubmissions();
+            renderFeedback();
+            updateStats();
+            updateStatus();
+            updateQueueStatus();
+            setInterval(updateQueueStatus, 2000);
+
+            // Load API key from localStorage
+            const savedKey = localStorage.getItem('nextstep_api_key');
+            if (savedKey) {
+                document.getElementById('apiKeyInput').value = savedKey;
+                apiKey = savedKey;
+                updateStatus();
+            }
+        });
+    </script>
+
+</body>
+</html>
